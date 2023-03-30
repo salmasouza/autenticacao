@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
 @Configuration
 @EnableAuthorizationServer
@@ -27,8 +28,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.withClient("pessoa-web")
 				.secret(passwordEncoder.encode("web123"))
 				.authorizedGrantTypes("password")
-				.scopes("write","read");
+				.scopes("write","read")
+				.accessTokenValiditySeconds(60*60*6);
 				
+	}
+	
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+		//security.checkTokenAccess("isAuthenticated()");
+		security.checkTokenAccess("permitAll()");
 	}
 	
 	@Override
